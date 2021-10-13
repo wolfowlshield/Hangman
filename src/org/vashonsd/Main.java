@@ -7,16 +7,16 @@ public class Main {
         Scanner input = new Scanner(System.in);
 
         String[] words = {"elephant","snake","tiger","zebra","kitten","porpoise","whale","horse","penguin","bear","moose","panda"};
-        String word = words[ (int) (Math.random() * (words.length + 1)) ];
+        String word = words[ (int) (Math.random() * (words.length)) ];
 
         int remainingTries = 10;
         boolean isRunning = true;
 
-        char letter; // Declaring these out here in case I need to use them to create a revealing word...
+        char letter;
         int indexOfLetter;
         int secondAppearance;
-        String revealedLetters = "";
 
+        String revealedLetters = "";
         for (int i = word.length(); i > 0; i--) {
             revealedLetters = revealedLetters.concat("-");
         }
@@ -39,26 +39,27 @@ public class Main {
                     System.out.println("Nope, that letter isn't in the word.");
                     remainingTries--;
                 } else {
-                    secondAppearance = word.substring(indexOfLetter + 1).indexOf(letter); // returns the int minus the substring length, need the -1 to check in the if statement
-                    if (secondAppearance == -1) {
+                    secondAppearance = word.lastIndexOf(letter); // One letter cannot appear more than twice w/ this logic...
+                    // secondAppearance = word.substring(indexOfLetter + 1).indexOf(letter);                                                                                          // Replace with .lastIndexOf, should make everything nicer
+                    if (secondAppearance == indexOfLetter) {
                         System.out.println("That letter appears once! At index " + indexOfLetter);
                         revealedLetters =
                                 revealedLetters.substring(0, indexOfLetter) +
                                 revealedLetters.substring(indexOfLetter, indexOfLetter + 1).replace('-',letter) +
                                 revealedLetters.substring(indexOfLetter + 1);
                     } else {
-                        secondAppearance += (indexOfLetter + 1); // adds the substring length (+1) the get the index of the actual appearance
                         System.out.println("That letter appears twice! At index " + indexOfLetter + " and " + secondAppearance);
                         revealedLetters =
                                 revealedLetters.substring(0, indexOfLetter) +
                                 revealedLetters.substring(indexOfLetter, indexOfLetter + 1).replace('-',letter) +
                                 revealedLetters.substring(indexOfLetter + 1, secondAppearance) +
                                 revealedLetters.substring(secondAppearance, secondAppearance + 1).replace('-', letter) +
-                                revealedLetters.substring(secondAppearance + 1); // There's gotta be a better way to do this...
+                                revealedLetters.substring(secondAppearance + 1); // There's gotta be a better way to do this, but this works so...
                     }
                 }
             }
-            if (revealedLetters.equals(word)) {
+            if (revealedLetters.equals(word) || guess.equals(word)) {
+                System.out.println(word);
                 System.out.println("Congratulations! You win!");
                 isRunning = false;
             }
