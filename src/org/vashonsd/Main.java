@@ -40,21 +40,13 @@ public class Main {
                     remainingTries--;
                 } else {
                     secondAppearance = word.lastIndexOf(letter); // One letter cannot appear more than twice w/ this logic...
-                    // secondAppearance = word.substring(indexOfLetter + 1).indexOf(letter);                                                                                          // Replace with .lastIndexOf, should make everything nicer
                     if (secondAppearance == indexOfLetter) {
                         System.out.println("That letter appears once! At index " + indexOfLetter);
-                        revealedLetters =
-                                revealedLetters.substring(0, indexOfLetter) +
-                                revealedLetters.substring(indexOfLetter, indexOfLetter + 1).replace('-',letter) +
-                                revealedLetters.substring(indexOfLetter + 1);
+                        revealedLetters = revealLetterAt(letter, indexOfLetter, revealedLetters);
                     } else {
                         System.out.println("That letter appears twice! At index " + indexOfLetter + " and " + secondAppearance);
-                        revealedLetters =
-                                revealedLetters.substring(0, indexOfLetter) +
-                                revealedLetters.substring(indexOfLetter, indexOfLetter + 1).replace('-',letter) +
-                                revealedLetters.substring(indexOfLetter + 1, secondAppearance) +
-                                revealedLetters.substring(secondAppearance, secondAppearance + 1).replace('-', letter) +
-                                revealedLetters.substring(secondAppearance + 1); // There's gotta be a better way to do this, but this works so...
+                        revealedLetters = revealLetterAt(letter, indexOfLetter, revealedLetters);
+                        revealedLetters = revealLetterAt(letter, secondAppearance, revealedLetters);
                     }
                 }
             }
@@ -68,5 +60,11 @@ public class Main {
                 isRunning = false;
             }
         }
+    }
+
+    private static String revealLetterAt(char letter, int index, String revealedLetters) {
+        return revealedLetters.substring(0, index) +
+                revealedLetters.substring(index, index + 1).replace('-', letter) +
+                revealedLetters.substring(index + 1);
     }
 }
